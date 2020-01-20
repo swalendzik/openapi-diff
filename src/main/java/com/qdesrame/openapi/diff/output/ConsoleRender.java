@@ -83,7 +83,7 @@ public class ConsoleRender implements Render {
         ul_detail
             .append(StringUtils.repeat(' ', 2))
             .append("Request:")
-            .append(System.lineSeparator())
+//            .append(System.lineSeparator())
             .append(ul_content(operation.getRequestBody().getContent(), true));
       }
       if (operation.resultApiResponses().isDifferent()) {
@@ -124,17 +124,18 @@ public class ConsoleRender implements Render {
     sb.append(StringUtils.repeat(' ', 4))
         .append("- ")
         .append(title)
-        .append(code)
-        .append(' ')
-        .append(status)
-        .append(System.lineSeparator());
+        .append("response ")
+        .append(code);
+//        .append(' ')
+//        .append(status);
+//        .append(System.lineSeparator());
     return sb.toString();
   }
 
   private String itemChangedResponse(String title, String contentType, ChangedResponse response) {
     StringBuilder sb = new StringBuilder();
     sb.append(itemResponse(title, contentType));
-    sb.append(StringUtils.repeat(' ', 6)).append("Media types:").append(System.lineSeparator());
+//    sb.append(StringUtils.repeat(' ', 6)).append("Media types:").append(System.lineSeparator());
     sb.append(ul_content(response.getContent(), false));
     return sb.toString();
   }
@@ -170,15 +171,23 @@ public class ConsoleRender implements Render {
   private String itemContent(
       String title, String contentType, ChangedMediaType changedMediaType, boolean isRequest) {
     StringBuilder sb = new StringBuilder();
-    sb.append(itemContent(title, contentType))
-        .append(StringUtils.repeat(' ', 10))
-        .append("Schema: ")
-        .append(changedMediaType.isCompatible() ? "Backward compatible" : "Broken compatibility")
-        .append(System.lineSeparator());
-    if (!changedMediaType.isCompatible()) {
-      sb.append(incompatibilities(changedMediaType.getSchema()));
-    }
+//    sb.append(itemContent(title, contentType))
+    sb.append(' ').append(contentType)
+//        .append(StringUtils.repeat(' ', 10))
+//        .append("Schema changes: ")
+//        .append(", ")
+//        .append(changedMediaType.isCompatible() ? "Backward compatible" : "Broken compatibility")
+        .append(System.lineSeparator())
+        .append(changedSchema(changedMediaType.getSchema()));
+//    if (!changedMediaType.isCompatible()) {
+//      sb.append(incompatibilities(changedMediaType.getSchema()));
+//    }
     return sb.toString();
+  }
+
+  private String changedSchema(final ChangedSchema schema) {
+    ContentChanges schemaChanges = new ContentChanges(schema);
+    return schemaChanges.changes(8);
   }
 
   private String incompatibilities(final ChangedSchema schema) {

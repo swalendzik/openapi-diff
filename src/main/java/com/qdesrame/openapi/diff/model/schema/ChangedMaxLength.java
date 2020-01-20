@@ -27,4 +27,12 @@ public class ChangedMaxLength implements Changed {
     }
     return DiffResult.INCOMPATIBLE;
   }
+
+  public Integer getOldValue() {
+    return oldValue;
+  }
+
+  public Integer getNewValue() {
+    return newValue;
+  }
 }
